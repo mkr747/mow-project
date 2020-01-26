@@ -3,13 +3,13 @@ source("functions.R")
 
 set.seed(42)
 
-arguments <- 200000
+arguments <- 2000
 area <- matrix(data = runif(arguments,-2,2), nrow=arguments/2, ncol=2)
 y1 <- generateGoldPrice(area)
 data_output = data.frame(X1 = area[,1], X2 = area[,2], Y = y1)
 model <- svm(Y ~ X1 + X2 , data_output)
 
-arguments2 <- 2000
+arguments2 <- 200
 set.seed(28)
 area2 <- matrix(data = runif(arguments2,-2,2), nrow=arguments2/2, ncol=2)
 y2 <- generateGoldPrice(area2)
