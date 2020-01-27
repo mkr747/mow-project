@@ -95,7 +95,7 @@ test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 
 predictions_gold = predict(tuneModel_gold, newdata = test_data)
 
-MSE_gold_T <- mse(intervals_T - test_data$Y)
-RMSE_gold_T <- rmse(intervals_T - test_data$Y)
+MSE_gold_T <- mse(predictions_gold - test_data$Y)
+RMSE_gold_T <- rmse(predictions_gold - test_data$Y)
 
 ##################################################################################################
