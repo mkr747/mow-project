@@ -36,7 +36,7 @@ generateAluffiPentini <- function(arguments){
 generateShiftedAndRotatedAckley <- function(arguments){
   library(cec2013)
   result <- 0
-  for(row in 1:nrow(area)) {
+  for(row in 1:nrow(arguments)) {
     result[row] <- cec2013(10, arguments[row,])
   }
   
