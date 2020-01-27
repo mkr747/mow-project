@@ -23,7 +23,8 @@ train_data = data.frame(X1 = area[,1], X2 = area[,2], Y = y)
 model <- lm(y~ poly(X1, X2, degree =4, raw=TRUE), data=train_data)
 
 intervals <- predict(model, interval='confidence', level = 0.99)
-MSEerr <- mse(intervals - train_data$Y) 
+MSEerr_Aluffi <- mse(intervals - train_data$Y) 
+RMSEerr_Aluffi <- rmse(intervals - train_data$Y) 
 
 #TEST
 set.seed(210)
@@ -33,8 +34,8 @@ y2 <- generateAluffiPentini(area2)
 test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 
 intervals_T <- predict(model, newdata = test_data, interval='confidence', level = 0.99)
-MSEerr_T <- mse(intervals_T - test_data$Y) 
-RMSEerr_T <- rmse(intervals_T - test_data$Y)
+MSEerrr_Aluffi_T <- mse(intervals_T - test_data$Y) 
+RMSEerrr_Aluffi_T <- rmse(intervals_T - test_data$Y)
 
 summary(model)
 
@@ -46,7 +47,8 @@ y <- generateShiftedAndRotatedAckley(area)
 train_data = data.frame(X1 = area[,1], X2 = area[,2], Y = y)
 model <- lm(y~ poly(X1,X2, degree =2, raw=TRUE), data=train_data)
 intervals <- predict(model, interval='confidence', level = 0.99)
-MSEerr <- mse(intervals - train_data$Y)
+MSEerr_Ackley <- mse(intervals - train_data$Y)
+RMSEerr_Ackley <- rmse(intervals - train_data$Y)
 
 set.seed(210)
 arguments <- 40000
@@ -54,8 +56,8 @@ area2 <- matrix(data = runif(arguments,-32,32), nrow=arguments/2, ncol=2)
 y2 <- generateShiftedAndRotatedAckley(area2)
 test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 intervals_T <- predict(model, newdata = test_data, interval='confidence', level = 0.99)
-MSEerr_T <- mse(intervals_T - test_data$Y)
-RMSEerr_T <- rmse(intervals_T - test_data$Y)
+MSEerr_Ackley_T <- mse(intervals_T - test_data$Y)
+RMSEerr_Ackley_T <- rmse(intervals_T - test_data$Y)
 
 ##########################################################################################
 #GlobalOpt - dwoch zmiennych
@@ -63,17 +65,18 @@ area <- input_Gold
 y <- generateGoldPrice(area)
 
 train_data = data.frame(X1 = area[,1], X2 = area[,2], Y = y)
-model <- lm(y~ poly(X1,X2, degree =9, raw=TRUE), data=train_data) # min 8
+model <- lm(y~ poly(X1,X2, degree =8, raw=TRUE), data=train_data) # min 8
 intervals <- predict(model, interval='confidence', level = 0.99)
-MSEerr <- mse(intervals - train_data$Y)
+MSEerr_Gold <- mse(intervals - train_data$Y)
+RMSEerr_Gold <- rmse(intervals - train_data$Y)
 
 set.seed(210)
 arguments <- 40000
 area2 <- matrix(data = runif(arguments,-2,2), nrow=arguments/2, ncol=2)
-y2 <- generateShiftedAndRotatedAckley(area2)
+y2 <- generateGoldPrice(area2)
 test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 intervals_T <- predict(model, newdata = test_data, interval='confidence', level = 0.99)
-MSEerr_T <- mse(intervals_T - test_data$Y)
-RMSEerr_T <- rmse(intervals_T - test_data$Y)
+MSEerr_Gold_T <- mse(intervals_T - test_data$Y)
+RMSEerr_Gold_T <- rmse(intervals_T - test_data$Y)
 
 ##################################################################################################
