@@ -34,7 +34,7 @@ test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 
 intervals_T <- predict(model, newdata = test_data, interval='confidence', level = 0.99)
 MSEerr_T <- mse(intervals_T - test_data$Y) 
-RMSEerr <- rmse(intervals_T - test_data$Y)
+RMSEerr_T <- rmse(intervals_T - test_data$Y)
 
 summary(model)
 
@@ -55,7 +55,7 @@ y2 <- generateShiftedAndRotatedAckley(area2)
 test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 intervals_T <- predict(model, newdata = test_data, interval='confidence', level = 0.99)
 MSEerr_T <- mse(intervals_T - test_data$Y)
-RMSEerr <- rmse(intervals_T - test_data$Y)
+RMSEerr_T <- rmse(intervals_T - test_data$Y)
 
 ##########################################################################################
 #GlobalOpt - dwoch zmiennych
@@ -74,6 +74,6 @@ y2 <- generateShiftedAndRotatedAckley(area2)
 test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 intervals_T <- predict(model, newdata = test_data, interval='confidence', level = 0.99)
 MSEerr_T <- mse(intervals_T - test_data$Y)
-RMSEerr <- rmse(intervals_T - test_data$Y)
+RMSEerr_T <- rmse(intervals_T - test_data$Y)
 
 ##################################################################################################
