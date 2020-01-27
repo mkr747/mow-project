@@ -60,7 +60,7 @@ area <- matrix(data = runif(arguments,-2,2), nrow=arguments/2, ncol=2)
 y <- generateGoldPrice(area)
 
 train_data = data.frame(X1 = area[,1], X2 = area[,2], Y = y)
-model <- lm(y~ poly(X1,X2, degree =9, raw=TRUE), data=train_data) # min 8 - 2.5 -18
+model <- lm(y~ poly(X1,X2, degree =9, raw=TRUE), data=train_data) # min 8
 intervals <- predict(model, interval='confidence', level = 0.99)
 MSEerr <- mse(intervals - train_data$Y)
 
@@ -76,9 +76,9 @@ RMSEerr <- rmse(intervals_T - test_data$Y)
 ##################################################################################################
 #Test nowych wartości
 library(pracma)
-grid_Ackley <- meshgrid(seq(-32, 32, by=1))
-grid_Aluffi <- meshgrid(seq(-10, 10, by=0.2))
-grid_Gold <- meshgrid(seq(-2, 2, by=0.05))
+grid_Ackley <- meshgrid(seq(-32, 32, by=0.645))
+grid_Aluffi <- meshgrid(seq(-10, 10, by=0.202))
+grid_Gold <- meshgrid(seq(-2, 2, by=0.0402))
 input_Ackley <- cbind(as.vector(grid_Ackley[[1]]), as.vector(grid_Ackley[[2]]))
 input_Aluffi <- cbind(as.vector(grid_Aluffi[[1]]), as.vector(grid_Aluffi[[2]]))
 input_Gold <- cbind(as.vector(grid_Gold[[1]]), as.vector(grid_Gold[[2]]))
