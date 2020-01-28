@@ -1,33 +1,77 @@
 library("ggplot2")
 library("nnet")
 
-curve(sin(x^2 + 2) * cos(x-1), -4, 4)
-funct1 <- function(x) sin(x^2 + 2) *cos(x-1)
-set.seed(42)
-x <- runif(10000, min = -10, max = 10) 
-y <- funct1(x) 
-p <- ggplot(data.frame(x = c(-4, 4)), aes(x = x)) + stat_function(fun = funct1)
+library(pracma)
+grid_Ackley <- meshgrid(seq(-32, 32, by=0.645))
+grid_Aluffi <- meshgrid(seq(-10, 10, by=0.202))
+grid_Gold <- meshgrid(seq(-2, 2, by=0.0402))
+input_Ackley <- cbind(as.vector(grid_Ackley[[1]]), as.vector(grid_Ackley[[2]]))
+input_Aluffi <- cbind(as.vector(grid_Aluffi[[1]]), as.vector(grid_Aluffi[[2]]))
+input_Gold <- cbind(as.vector(grid_Gold[[1]]), as.vector(grid_Gold[[2]]))
 
-nn <- nnet(x, y, size=40, maxit=1000, linout=TRUE, skip=TRUE)
-grid <- seq(-4, 4, by=0.1)
-lines(grid, predict(nn, data.frame(x=grid)), col="blue")
+area <- input_Aluffi
+y <- generateAluffiPentini(area)
+train_data = data.frame(X1 = area[,1], X2 = area[,2], Y = y)
+#Model sieci neuronowej
+nn <- nnet(y~X1+X2, data=train_data, size=60, maxit=1000, linout=TRUE, skip=TRUE)
 
-plot.nnet()
+out <- predict(nn, train_data)
+MSEerr_Aluffi <- mse(out - train_data$Y) 
+MAE_Aluffi <- mae(out - train_data$Y)
 
-detach("package:ggplot2")
 
-#nnet function from nnet package
-library(nnet)
-set.seed(seed.val)
-mod1<-nnet(rand.vars,resp,data=dat.in,size=10,linout=T)
+#TEST
+set.seed(210)
+arguments <- 40000
+area2 <- matrix(data = runif(arguments,-10,10), nrow=arguments/2, ncol=2)
+y2 <- generateAluffiPentini(area2)
+test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
 
-#neuralnet function from neuralnet package, notice use of only one response
-library(neuralnet)
-form.in<-as.formula('Y1~X1+X2+X3+X4+X5+X6+X7+X8')
-set.seed(seed.val)
-mod2<-neuralnet(form.in,data=dat.in,hidden=10)
+out_T <- predict(nn, test_data)
+MSEerr_Aluffi_T <- mse(out_T - test_data$Y) 
+MAE_Aluffi_T <- mae(out_T - test_data$Y)
 
-#mlp function from RSNNS package
-library(RSNNS)
-set.seed(seed.val)
-mod3<-mlp(rand.vars, resp, size=10,linOut=T)
+###############################################################################################################
+#CEC2013
+area <- input_Ackley
+y <- generateShiftedAndRotatedAckley(area)
+
+train_data = data.frame(X1 = area[,1], X2 = area[,2], Y = y)
+nn <- nnet(y~X1+X2, data=train_data, size=60, maxit=1000, linout=TRUE, skip=TRUE)
+out <- predict(nn, train_data)
+MSEerr_Ackley <- mse(out - train_data$Y)
+MAE_Ackley <- mae(out - train_data$Y)
+
+set.seed(210)
+arguments <- 40000
+area2 <- matrix(data = runif(arguments,-32,32), nrow=arguments/2, ncol=2)
+y2 <- generateShiftedAndRotatedAckley(area2)
+test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
+out_T <- predict(nn, test_data)
+MSEerr_Ackley_T <- mse(out_T - test_data$Y)
+MAE_Ackley_T <- mae(out_T - test_data$Y)
+
+##########################################################################################
+#GlobalOpt
+area <- input_Gold
+y <- generateGoldPrice(area)
+
+train_data = data.frame(X1 = area[,1], X2 = area[,2], Y = y)
+nn <- nnet(y~X1+X2, data=train_data, size=100, maxit=5000, linout=TRUE, skip=TRUE)
+out <- predict(nn, train_data)
+MSEerr_Gold <- mse(out - train_data$Y)
+MAE_Gold <- mae(out - train_data$Y)
+
+set.seed(210)
+arguments <- 40000
+area2 <- matrix(data = runif(arguments,-2,2), nrow=arguments/2, ncol=2)
+y2 <- generateGoldPrice(area2)
+test_data = data.frame(X1 = area2[,1], X2 = area2[,2], Y = y2)
+
+out_T <- predict(nn, test_data)
+MSEerr_Gold_T <- mse(out_T - test_data$Y)
+MAE_Gold_T <- mae(out_T - test_data$Y)
+
+##################################################################################################
+
+
